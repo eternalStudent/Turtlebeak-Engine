@@ -1,0 +1,65 @@
+{
+[type]: 'm'
+[name]: "left race car"
+[ASCII]: [(17, 12, 0)]
+[tiles]: [8]
+}
+{
+[type]: 'm'
+[name]: "bulldozer"
+[ASCII]: [(219, 14, 0)]
+[tiles]: [9]
+}
+{
+[type]: 'm'
+[name]: "private car"
+[ASCII]: [(7, 13, 11)]
+[tiles]: [10]
+}
+{
+[type]: 'm'
+[name]: "right race car"
+[ASCII]: [(16, 10, 0)]
+[tiles]: [11]
+}
+{
+[type]: 'm'
+[name]: "truck"
+[ASCII]: [(32, 0, 11), (32, 0, 11)]
+[tiles]: [12, 13]
+}
+{
+[type]: 'm'
+[name]: "left turtles"
+[ASCII]: [(7, 12, 1), (7, 12, 1), (7, 12, 1)]
+[tiles]: [14, 14, 14]
+[pass]: true
+}
+{
+[type]: 'm'
+[name]: "right turtles"
+[ASCII]: [(7, 12, 1), (7, 12, 1)]
+[tiles]: [14, 14]
+[pass]: true
+}
+{
+[type]: 'm'
+[name]: "log2"
+[ASCII]: [(205, 6, 1), (205, 6, 1)]
+[tiles]: [5, 7]
+[pass]: true
+}
+{
+[type]: 'm'
+[name]: "log3"
+[ASCII]: [(205, 6, 1), (205, 6, 1), (205, 6, 1)]
+[tiles]: [5, 6, 7]
+[pass]: true
+}
+{
+[type]: 'm'
+[name]: "log5"
+[ASCII]: [(205, 6, 1), (205, 6, 1), (205, 6, 1), (205, 6, 1), (205, 6, 1)]
+[tiles]: [5, 6, 6, 7]
+[pass]: true
+}

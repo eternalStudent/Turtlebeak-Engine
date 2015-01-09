@@ -7,8 +7,8 @@ import model.Entity;
 import model.EventHandler;
 import model.Item;
 import model.MOB;
-import model.ASCII;
-import model.Tileset;
+import util.ASCII;
+import util.Tileset;
 import model.World;
 import util.Lambda;
 import util.Point;
@@ -20,16 +20,15 @@ public class SnakeGame {
 	private final Keyboard keyboard = new Keyboard();
 	private final Board board = new Board(keyboard, "snake");;
 	private World world;
-	private final ASCII snakeTile = new ASCII('O', 7, 0);
+	private final ASCII snakeTile = new ASCII('O', 13, 1);
 	private MOB player;
 	private Item mouse;
 	private EventHandler game;
-	private StringBuilder screenBarText;
+	private StringBuilder[] screenBarText = new StringBuilder[1];
 	
 	private SnakeGame(){
 		initialize();
 		int key = 0;
-		int prev;
 		while (key != KeyEvent.VK_N){
 			Point[] loc = {new Point(17, 16), new Point(16, 16), new Point(15, 16), new Point(14, 16)};
 			ASCII[] asciis = {snakeTile, snakeTile, snakeTile, snakeTile};
@@ -38,30 +37,26 @@ public class SnakeGame {
 			player.snakelike=true;
 			world.add(player);
 			while (key != KeyEvent.VK_ESCAPE && !player.isDead()){
-				screenBarText.delete(0, screenBarText.length());
-				screenBarText.append("score: "+Integer.toString(player.XP));
-			
-				prev = key;
+				screenBarText[0].delete(0, screenBarText[0].length());
+				screenBarText[0].append("score: "+Integer.toString(player.XP));
+				Point dir = new Point(0, 0);
 				if (keyboard.keypressed())
 					key = keyboard.get();
-				if (key == KeyEvent.VK_UP || key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_DOWN ){
-					Point p = Keyboard.ArrowToPoint(key);
-					if (!game.move(player, p)){
-						player.HP=0;
-						screenBarText.append(" Game Over!");
-					}	
-					if (player.loc.get(player.loc.size()-1).equals(mouse.loc.get(0))){
-						player.loc.add(0, player.loc.get(0));
-						player.ascii.add(snakeTile);
-						world.remove(mouse);
-						while(player.loc.contains(mouse.loc.get(0)))
-							mouse.loc.set(0, Random.nextPoint(1, 30, 1, 30));
-						world.add(mouse);
-						player.XP++;
-					}
+				if (key == KeyEvent.VK_UP || key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_DOWN )
+					dir = Keyboard.ArrowToPoint(key);
+				if (!game.move(player, dir)){
+					player.HP=0;
+					screenBarText[0].append(" Game Over!");
 				}	
-				else
-					key = prev;
+				if (player.loc.get(player.loc.size()-1).equals(mouse.loc.get(0))){
+					player.loc.add(0, player.loc.get(0));
+					player.ascii.add(snakeTile);
+					world.remove(mouse);
+					while(player.loc.contains(mouse.loc.get(0)))
+						mouse.loc.set(0, Random.nextPoint(1, 30, 1, 30));
+					world.add(mouse);
+					player.XP++;
+				}
 				board.repaint();
 				try {
 					Thread.sleep(100);
@@ -73,10 +68,10 @@ public class SnakeGame {
 				do {
 					key = keyboard.get();
 				}while (key != KeyEvent.VK_ENTER);
-			world.remove(player);
-			screenBarText.delete(0, screenBarText.length());
-			screenBarText.append("Play Again? (Y/N)");
+			screenBarText[0].delete(0, screenBarText[0].length());
+			screenBarText[0].append("Play Again? (Y/N)");
 			board.repaint();
+			world.remove(player);
 			do{
 				key = keyboard.get();
 			}while (key!=KeyEvent.VK_N && key != KeyEvent.VK_Y);
@@ -95,27 +90,27 @@ public class SnakeGame {
 		Lambda<Point, Entity> defaultTerrain = new Lambda<Point, Entity>(){
 			public Entity produce(Point p){
 				if (p.x*p.y*(p.x-31)*(p.y-31)==0){
-					Entity e = new Entity("wall");
-					e.add(p,  new ASCII('#', 8, 0));
-					e.passable = false;
-					return e;
+					Entity wall = new Entity("wall");
+					wall.add(p,  new ASCII(' ', 8, 11));
+					wall.passable = false;
+					return wall;
 				}
-				Entity e = new Entity("floor");
-				e.add(p, new ASCII(0, 0, 0));
-				return e;
+				Entity floor = new Entity("floor");
+				floor.add(p, new ASCII(' ', 7, 1));
+				return floor;
 			}
 		};
 		world = new World(tileset, defaultTerrain);
 		
 		mouse = new Item("mouse");
-		mouse.add(Random.nextPoint(1, 30, 1, 30), new ASCII((int)'*', 15, 0));
+		mouse.add(Random.nextPoint(1, 30, 1, 30), new ASCII((int)'*', 15, 1));
 		world.add(mouse);
 		
 		game = new EventHandler(world);
 		
 		board.setScreen(world, new Point(32, 32));
-		screenBarText = new StringBuilder();
-		board.addScreenBar(tileset, 1, screenBarText, BorderLayout.NORTH);
+		screenBarText[0] = new StringBuilder();
+		board.addScreenBar(tileset, screenBarText, BorderLayout.NORTH, 7, 0);
 	}
 
 	public static void main(String[] args) {

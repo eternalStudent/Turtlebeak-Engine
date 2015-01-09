@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import model.Entity;
 import model.EventHandler;
 import model.MOB;
-import model.Tileset;
+import util.Tileset;
 import model.World;
 import util.Lambda;
 import util.Point;
@@ -15,7 +15,7 @@ import controller.Keyboard;
 public class Dungeon {
 	
 	private final Keyboard keyboard = new Keyboard();
-	private final Board board = new Board(keyboard, "snake");;
+	private final Board board = new Board(keyboard, "dungeon");;
 	private World world;
 	private MOB player;
 	private EventHandler game;

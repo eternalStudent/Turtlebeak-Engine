@@ -1,4 +1,4 @@
-package model;
+package util;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -75,7 +75,7 @@ public class Tileset {
 		return image.getSubimage((i%cols)*tw, (i/cols)*th, tw, th);
 	}
 	
-	protected Color color(int i){
+	public Color color(int i){
 		return new Color(palette[i]);
 	}
 	

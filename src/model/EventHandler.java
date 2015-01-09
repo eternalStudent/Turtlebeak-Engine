@@ -12,16 +12,20 @@ public class EventHandler {
 		this.world = world;
 	}
 	
-	public boolean move(MOB m, Point p){
+	public boolean move(MOB mob, Point dir){
+		if (dir.equals(0, 0))
+			return true;
 		boolean temp = true;
-		List<Point> ps = new ArrayList<>();
-		ps.addAll(m.loc);
-		world.remove(m);
-		if (!m.move(p.x, p.y) || !world.passable(m.loc)){
-			m.loc = ps;
+		List<Point> prevLoc = new ArrayList<>();
+		prevLoc.addAll(mob.loc);
+		world.remove(mob);
+		if ( !mob.move(dir.x, dir.y) || (!world.passable(mob.loc) && (!mob.passable)) ){
+			mob.loc = prevLoc;
 			temp = false;
 		}	
-		world.add(m);
+		world.add(mob);
+		for (MOB m: mob.ties)
+			move(m, dir);
 		return temp;
 	}
 

@@ -3,7 +3,7 @@ public class Item extends Entity {
 
 	public Item(String name) {
 		super(name);
-		sort = 1.0;
+		zLevel = 1.0;
 	}
 
 }

@@ -7,22 +7,34 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import util.Point;
-import model.ASCII;
-import model.Tileset;
+import util.ASCII;
+import util.Tileset;
 
 @SuppressWarnings("serial")
 public abstract class Screen extends JPanel{
 	
-	private Tileset tileset;
-	public Dimension dim;
+	protected Tileset tileset;
+	protected Dimension dim;
+	protected Font font;
 	
 	protected Screen(Tileset tileset, Point p){
 		super();
 		this.tileset = tileset;
+		font = new Font(Font.SANS_SERIF, Font.PLAIN, tileset.th);
 		setBackground(Color.BLACK);
 		dim = new Dimension(p.x, p.y);
 		p = tileset.toScreen.produce(p);
 		setPreferredSize(new Dimension(p.x, p.y));
+	}
+	
+	protected void writeTF(Graphics g, String st, int x, int y, int color){
+		writeTF(g, st, new Point(x, y), color);
+	}
+	
+	protected void writeTF(Graphics g, String st, Point p, int color){
+		p = tileset.toScreen.produce(p.add(new Point(0, 1)));
+		g.setColor(tileset.color(color));
+		g.drawString(st, p.x, p.y-g.getFontMetrics().getMaxDescent());
 	}
 	
 	protected void draw(Graphics g, ASCII tile, int x, int y){
@@ -50,9 +62,8 @@ public abstract class Screen extends JPanel{
 	}
 	
 	public void paint(Graphics g){
-		super.paint(g);;
-		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, tileset.th));
-
+		super.paint(g);
+		g.setFont(font);
 	}
 
 }

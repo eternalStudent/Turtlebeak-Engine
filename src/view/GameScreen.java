@@ -2,7 +2,6 @@ package view;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
 
 import model.Entity;
 import model.World;
@@ -21,16 +20,18 @@ public class GameScreen extends Screen {
 	public void paint(Graphics g){
 		super.paint(g);
 		for (int x=0; x<dim.width; x++)
-			for (int y=0; y<dim.height; y++){
+			for (int y=0; y<dim.height; y++){ 
 				Point p = new Point(x, y);
-				SortedSet<Entity> es = world.get(p);
-				List<Entity> list = new ArrayList<>(es);
+				world.get(p);
+			}
+		List<Entity> list = new ArrayList<>(world.entities);
+		for (Entity e: list)
+			for (Point p: e.loc){
 				if (world.tileset.ASCII)
-					draw(g, es.last().getAscii(p), p);
+					draw(g, e.getAscii(p), p);
 				else
-					for (int i=0; i<es.size(); i++){
-						draw(g, list.get(i).getTile(p), p);
-					}	
+					draw(g, e.getTile(p), p);
+						
 			}	
 	}
 
