@@ -19,8 +19,8 @@ public class GameScreen extends Screen {
 	
 	public void paint(Graphics g){
 		super.paint(g);
-		for (int x=0; x<dim.width; x++)
-			for (int y=0; y<dim.height; y++){ 
+		for (int x=world.loc.x; x<world.loc.x+dim.width; x++)
+			for (int y=world.loc.y; y<world.loc.y+dim.height; y++){ 
 				Point p = new Point(x, y);
 				world.get(p);
 			}
@@ -28,9 +28,9 @@ public class GameScreen extends Screen {
 		for (Entity e: list)
 			for (Point p: e.loc){
 				if (world.tileset.ASCII)
-					draw(g, e.getAscii(p), p);
+					draw(g, e.getAscii(p), p.subtract(world.loc));
 				else
-					draw(g, e.getTile(p), p);
+					draw(g, e.getTile(p), p.subtract(world.loc));
 						
 			}	
 	}

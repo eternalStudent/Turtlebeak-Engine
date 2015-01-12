@@ -20,7 +20,7 @@ public class SnakeGame {
 	private final Keyboard keyboard = new Keyboard();
 	private final Board board = new Board(keyboard, "snake");;
 	private World world;
-	private final ASCII snakeTile = new ASCII('O', 13, 1);
+	private final ASCII snakeTile = new ASCII('O', 6, 10);
 	private MOB player;
 	private Item mouse;
 	private EventHandler game;
@@ -91,19 +91,19 @@ public class SnakeGame {
 			public Entity produce(Point p){
 				if (p.x*p.y*(p.x-31)*(p.y-31)==0){
 					Entity wall = new Entity("wall");
-					wall.add(p,  new ASCII(' ', 8, 11));
+					wall.add(p,  new ASCII(' ', 8, 3));
 					wall.passable = false;
 					return wall;
 				}
 				Entity floor = new Entity("floor");
-				floor.add(p, new ASCII(' ', 7, 1));
+				floor.add(p, new ASCII(' ', 7, 10));
 				return floor;
 			}
 		};
 		world = new World(tileset, defaultTerrain);
 		
 		mouse = new Item("mouse");
-		mouse.add(Random.nextPoint(1, 30, 1, 30), new ASCII((int)'*', 15, 1));
+		mouse.add(Random.nextPoint(1, 30, 1, 30), new ASCII((int)'*', 0, 10));
 		world.add(mouse);
 		
 		game = new EventHandler(world);

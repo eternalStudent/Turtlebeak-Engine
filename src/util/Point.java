@@ -43,6 +43,14 @@ public class Point{
 		return new Point(this.x+x, this.y+y);
 	}
 	
+	public Point subtract(Point other){
+		return new Point(x-other.x, y-other.y);
+	}
+	
+	public Point subtract(int x, int y){
+		return new Point(this.x-x, this.y-y);
+	}
+	
 	public String toString(){
 		return "("+x+", "+y+")";
 	}

@@ -25,7 +25,7 @@ public class Frogger {
 	private MOB player;
 	private EventHandler game;
 	private final List<MOB> mobs = new ArrayList<>();
-	private final int[][] lifes = {{17, 17, 18}};
+	private final int[][] lifes = new int[1][3];
 	private final StringBuilder[] text = new StringBuilder[1];
 	private final List<MOB> frogs = new ArrayList<>();
 	
@@ -34,11 +34,12 @@ public class Frogger {
 		int key = 0;
 		while (key != KeyEvent.VK_N){
 			lifes[0][0] = 17; lifes[0][1] = 17; lifes[0][2] = 18;
-			player.loc.set(0, new Point(9, 12));
-			player.XP = 0;
+			player = new MOB("player");
+			player.zLevel = 3.0;
+			player.HP = 5;
+			player.add(new Point(7, 12), 4);
+			moveToStart();
 			int minY = 12;
-			world.add(player);
-			world.remove(player);
 			for (MOB frog: frogs)
 				world.remove(frog);
 			frogs.clear();
@@ -46,7 +47,6 @@ public class Frogger {
 				
 				//player reached the end
 				if (player.loc.get(0).y==0){
-					world.remove(player);
 					if (frogs.size() == 4){
 						for (MOB frog: frogs)
 							world.remove(frog);
@@ -58,10 +58,9 @@ public class Frogger {
 						world.add(frog);
 						frogs.add(frog);
 					}
+					moveToStart();
 					player.XP+=5;
-					player.loc.set(0, new Point(9, 12));
 					minY = 12;
-					world.add(player);
 				}
 				else{
 					if (player.loc.get(0).y<minY){
@@ -114,6 +113,7 @@ public class Frogger {
 			text[0].delete(0, text[0].length());
 			text[0].append("Play Again? (Y/N)");
 			board.repaint();
+			world.remove(player);
 			do{
 				key = keyboard.get();
 			}while (key!=KeyEvent.VK_N && key != KeyEvent.VK_Y);	
@@ -157,12 +157,6 @@ public class Frogger {
 			}
 		};
 		world = new World(tileset, defaultTerrain);
-		
-		player = new MOB("player");
-		player.add(new Point(9, 12), 4);
-		player.zLevel = 3.0;
-		player.HP = 5;
-		world.add(player);
 				
 		try {
 			Entity.fromResource(getClass().getResource("frogger.txt"));
@@ -225,10 +219,14 @@ public class Frogger {
 		};
 	}
 	
-	private void loseLife(){
+	private void moveToStart(){
 		world.remove(player);
 		player.loc.set(0,  new Point(9, 12));
 		world.add(player);
+	}
+	
+	private void loseLife(){
+		moveToStart();
 		player.HP--;
 		if (player.HP%2==0)
 			lifes[0][player.HP/2] = 19;

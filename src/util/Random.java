@@ -19,6 +19,10 @@ public class Random {
 		return new Point(nextInt(x0, x1), nextInt(y0, y1));
 	}
 	
+	public static Point nextPoint(int x, int y){
+		return new Point(nextInt(x), nextInt(y));
+	}
+	
 	public static boolean isNext(int i){
 		return nextInt(i)==0;
 	}

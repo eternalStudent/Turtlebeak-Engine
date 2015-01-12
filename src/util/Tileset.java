@@ -20,6 +20,7 @@ public class Tileset {
 	public boolean ASCII = false;
 	private int[] palette = {-16777216, -16777088, -16744448, -16744320, -8388608, -8388480, -8355840, -4144960, -8355712, -16776961, -16711936, -16711681, -65536, -65281, -256, -1};
 	private Map<ASCII, BufferedImage> dict = new HashMap<>();
+	private BufferedImage[] tiles;
 	
 	public Tileset(String pathname, int tw, int th, Lambda<Point, Point> toScreen){
 		try { image = ImageIO.read(new File(pathname)); } 
@@ -28,6 +29,9 @@ public class Tileset {
 		this.tw=tw;
 		this.th=th;
 		cols = image.getWidth()/tw;
+		tiles = new BufferedImage[cols*image.getHeight()/th];
+		for (int i=0; i<tiles.length; i++)
+			tiles[i] = image.getSubimage((i%cols)*tw, (i/cols)*th, tw, th);
 		this.toScreen = toScreen;
 	}
 	
@@ -72,7 +76,7 @@ public class Tileset {
 	
 	
 	public BufferedImage getTileImage(int i){
-		return image.getSubimage((i%cols)*tw, (i/cols)*th, tw, th);
+		return tiles[i];
 	}
 	
 	public Color color(int i){
