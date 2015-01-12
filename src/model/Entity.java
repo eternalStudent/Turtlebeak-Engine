@@ -13,6 +13,7 @@ import com.google.common.io.Resources;
 
 import util.Parser;
 import util.Point;
+import util.Tile;
 import util.Tileset;
 import util.ASCII;
 
@@ -30,7 +31,7 @@ public class Entity implements Comparable<Entity>{
 	
 	public List<ASCII> ascii = new ArrayList<>();
 	public List<Point> loc = new ArrayList<>();
-	public List<Integer> tiles = new ArrayList<>();
+	public List<Tile> tiles = new ArrayList<>();
 	public Tileset spritesheet;
 	
 	public Entity(String name){
@@ -69,6 +70,13 @@ public class Entity implements Comparable<Entity>{
 		return clone(dict.get(name));
 	}
 	
+	private static List<Tile> toTiles(List<Integer> list){
+		List<Tile> tiles = new ArrayList<>();
+		for (int i=0; i<list.size(); i++)
+			tiles.add(new Tile(list.get(i)));
+		return tiles;
+	}
+	
 	public static void fromText(String text){
 		Pattern pattern = Pattern.compile("\\{([^//}])*\\}");
 		Matcher matcher = pattern.matcher(text);
@@ -81,7 +89,7 @@ public class Entity implements Comparable<Entity>{
 			e.solid = Parser.read(elem, "solid", e.solid);
 			e.transparent = Parser.read(elem, "trans", e.transparent);
 			e.zLevel = Parser.read(elem, "sort", e.zLevel);
-			e.tiles = Parser.readIntList(elem, "tiles", new ArrayList<Integer>());
+			e.tiles = toTiles(Parser.readIntList(elem, "tiles", new ArrayList<Integer>()));
 			e.ascii = Parser.readASCIIList(elem, "ASCII", new ArrayList<ASCII>());
 			if (type == 'm')
 				MOB.fromText(elem, (MOB)e);
@@ -97,7 +105,7 @@ public class Entity implements Comparable<Entity>{
 		return ascii.get(loc.indexOf(p));
 	}
 	
-	public int getTile(Point p){
+	public Tile getTile(Point p){
 	
 		return tiles.get(loc.indexOf(p));
 	}
@@ -116,7 +124,7 @@ public class Entity implements Comparable<Entity>{
 	
 	public void add(Point loc, int tile){
 		this.loc.add(loc);
-		this.tiles.add(tile);
+		this.tiles.add(new Tile (tile));
 	}
 		
 	@Override

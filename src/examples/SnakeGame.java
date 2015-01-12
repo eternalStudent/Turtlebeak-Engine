@@ -110,7 +110,7 @@ public class SnakeGame {
 		
 		board.setScreen(world, new Point(32, 32));
 		screenBarText[0] = new StringBuilder();
-		board.addScreenBar(tileset, screenBarText, BorderLayout.NORTH, 7, 0);
+		board.addScreenBar(tileset, screenBarText, 1, BorderLayout.NORTH, 7, 0);
 	}
 
 	public static void main(String[] args) {

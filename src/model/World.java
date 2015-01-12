@@ -1,9 +1,11 @@
 package model;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import util.Filter;
 import util.Lambda;
 import util.Point;
 import util.SortedList;
@@ -16,6 +18,7 @@ public class World {
 	public List<Entity> entities = new SortedList<>();
 	public Point loc = new Point(0,0);
 	private Map<Point, List<Entity>> dict = new HashMap<>();
+	private Map<Point, List<Filter>> visual = new HashMap<>();
 	
 	public World(Tileset tileset, Lambda<Point, Entity> defaultTerrain){
 		this.tileset = tileset;
@@ -59,6 +62,39 @@ public class World {
 					return false;
 		}	
 		return true;
+	}
+	
+	public boolean transparent(Point p){
+		List<Entity> list = get(p);
+		for (Entity e: list)
+			if (!e.transparent)
+				return false;
+		return true;
+	}
+	
+	public boolean isVisible(Point p){
+		return visual.containsKey(p);
+	}
+	
+	public List<Filter> getFilters(Point p){
+		if (visual.containsKey(p))
+			return visual.get(p);
+		return new ArrayList<Filter>();
+	}
+	
+	public void filterAll(Filter filter){
+		for (Point p: visual.keySet())
+			visual.get(p).add(filter);
+	}
+	
+	public void unfilterAll(){
+		for (Point p: visual.keySet())
+			visual.put(p, new ArrayList<Filter>());
+	}
+	
+	public void addAllUnfiltered(Collection<Point> c){
+		for (Point p: c)
+			visual.put(p, new ArrayList<Filter>());
 	}
 	
 	public Point toScreen(Point p){

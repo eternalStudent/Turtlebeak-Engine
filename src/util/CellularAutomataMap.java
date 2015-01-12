@@ -7,10 +7,10 @@ public class CellularAutomataMap {
 	
 	private Set<Point> walls = new HashSet<>();
 	
-	public CellularAutomataMap(int width, int height, int generations){
+	public CellularAutomataMap(int width, int height, int generations, int first, Lambda<Integer, Boolean> func){
 		for (int x=0; x<width; x++)
 			for (int y=0; y<height; y++)
-				if (Random.nextInt(20)<9)
+				if (Random.nextInt(120)<first)
 					walls.add(new Point(x, y));
 		for (int i=0; i<generations; i++){
 			Set<Point> temp = new HashSet<>();
@@ -18,7 +18,7 @@ public class CellularAutomataMap {
 				for (int y=0; y<height; y++){
 					Point p = new Point(x, y);
 					int count = count(p);
-					if (count>=5 || count==0)
+					if (func.produce(count))
 						temp.add(p);
 				}
 			walls = temp;
@@ -30,7 +30,15 @@ public class CellularAutomataMap {
 					walls.remove(p);
 				if (x*y*(x-width+1)*(y-height+1)==0)
 					walls.add(p);
-			}	
+			}
+	}
+	
+	public CellularAutomataMap(int width, int height, int generations){
+		this(width, height, generations, 54, new Lambda<Integer, Boolean>(){
+			public Boolean produce(Integer i){
+				return (i>=5 || i==0);
+			}
+		});
 	}
 	
 	private int count(Point p){

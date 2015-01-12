@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import util.Point;
 import util.ASCII;
+import util.Tile;
 import util.Tileset;
 
 @SuppressWarnings("serial")
@@ -46,7 +47,7 @@ public abstract class Screen extends JPanel{
 		g.drawImage(tileset.getTileImage(tile), p.x, p.y, null);
 	}
 	
-	protected void draw(Graphics g, int tile, Point p){
+	protected void draw(Graphics g, Tile tile, Point p){
 		p = tileset.toScreen.produce(p);
 		g.drawImage(tileset.getTileImage(tile), p.x, p.y, null);
 	}

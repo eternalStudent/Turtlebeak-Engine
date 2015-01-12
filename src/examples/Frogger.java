@@ -46,7 +46,7 @@ public class Frogger {
 			while (key != KeyEvent.VK_ESCAPE && !player.isDead()){
 				
 				//player reached the end
-				if (player.loc.get(0).y==0){
+				if (player.loc().y==0){
 					if (frogs.size() == 4){
 						for (MOB frog: frogs)
 							world.remove(frog);
@@ -54,7 +54,7 @@ public class Frogger {
 					}
 					else{
 						MOB frog = new MOB("frog");
-						frog.add(player.loc.get(0), 4);
+						frog.add(player.loc(), 4);
 						world.add(frog);
 						frogs.add(frog);
 					}
@@ -63,7 +63,7 @@ public class Frogger {
 					minY = 12;
 				}
 				else{
-					if (player.loc.get(0).y<minY){
+					if (player.loc().y<minY){
 						minY--;
 						player.XP++;
 					}
@@ -79,7 +79,7 @@ public class Frogger {
 						Point dir = Keyboard.ArrowToPoint(key);
 						if (!game.move(player, dir))
 							loseLife();
-						for (Entity e: world.get(player.loc.get(0)))
+						for (Entity e: world.get(player.loc()))
 							if (e!=player && e.getClass().getName().equals("model.MOB")){
 								((MOB)e).ties.add(player);
 							}	
@@ -90,7 +90,7 @@ public class Frogger {
 				for (MOB m: mobs){
 					if (!m.act())
 						loseLife();
-					if (m.ties.size()>0 && m.ties.contains(player) && !m.loc.contains(player.loc.get(0))){
+					if (m.ties.size()>0 && m.ties.contains(player) && !m.loc.contains(player.loc())){
 						m.ties.remove(player);
 					}	
 				}
@@ -187,9 +187,9 @@ public class Frogger {
 		
 		game = new EventHandler(world);
 		board.setScreen(world, new Point(20, 13));
-		board.addScreenBar(tileset, lifes, BorderLayout.SOUTH);
+		board.addScreenBar(tileset, lifes, 1, BorderLayout.SOUTH);
 		text[0] = new StringBuilder();
-		board.addScreenBar(tileset, text, BorderLayout.NORTH, 12, 0);
+		board.addScreenBar(tileset, text, 1, BorderLayout.NORTH, 12, 0);
 	}
 	
 	private AI newAI(int dir, int wait){
@@ -200,13 +200,13 @@ public class Frogger {
 			public boolean act(){
 				if (waitingPeriod == 0){
 					for (int i=0; i<mob.loc.size(); i++)
-						if (mob.loc.get(i).equals(x1, mob.loc.get(i).y)){
+						if (mob.loc(i).equals(x1, mob.loc(i).y)){
 							world.remove(mob);
-							if (mob.loc.get(i).equals(player.loc.get(0))){
+							if (mob.loc(i).equals(player.loc())){
 								mob.ties.remove(player);
 								loseLife();
 							}	
-							mob.loc.set(i, new Point(x2, mob.loc.get(i).y));
+							mob.loc.set(i, new Point(x2, mob.loc(i).y));
 							world.add(mob);
 						}
 					waitingPeriod = wait;

@@ -14,6 +14,8 @@ public class MOB extends Entity{
 	public int XP;
 	public AI ai;
 	public Set<MOB> ties = new HashSet<>();
+	public Set<Point> visual = new HashSet<>();
+	public int vision = 5;
 
 	public MOB(String name) {
 		super(name);
@@ -35,6 +37,7 @@ public class MOB extends Entity{
 		m.maxHP = ((MOB)other).maxHP;
 		m.snakelike = ((MOB)other).snakelike;
 		m.ai = ((MOB)other).ai.clone();
+		m.vision = ((MOB)other).vision;
 		//m.ai.mob = m;
 	}
 	
@@ -42,12 +45,21 @@ public class MOB extends Entity{
 		m.maxHP = Parser.read(text, "HP", 3);
 		m.HP = m.maxHP;
 		m.snakelike = Parser.read(text, "snake", false);
+		m.vision = Parser.read(text, "vision", 5);
 	}
 	
 	public static MOB clone(MOB other){
 		MOB m = new MOB(other.name);
 		copy(m, other);
 		return m;
+	}
+	
+	public Point loc(){
+		return loc.get(0);
+	}
+	
+	public Point loc(int i){
+		return loc.get(i);
 	}
 	
 	public boolean act(){

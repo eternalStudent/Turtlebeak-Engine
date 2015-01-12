@@ -11,10 +11,12 @@ import util.Point;
 public class GameScreen extends Screen {
 	
 	private World world;
+	private boolean showAll;
 
-	protected GameScreen(World world, Point p) {
-		super(world.tileset, p);
+	protected GameScreen(World world, Point dim, boolean showAll) {
+		super(world.tileset, dim);
 		this.world = world;
+		this.showAll = showAll;
 	}
 	
 	public void paint(Graphics g){
@@ -27,11 +29,12 @@ public class GameScreen extends Screen {
 		List<Entity> list = new ArrayList<>(world.entities);
 		for (Entity e: list)
 			for (Point p: e.loc){
-				if (world.tileset.ASCII)
-					draw(g, e.getAscii(p), p.subtract(world.loc));
-				else
-					draw(g, e.getTile(p), p.subtract(world.loc));
-						
+				if (world.isVisible(p) || showAll){
+					if (world.tileset.ASCII)
+						draw(g, e.getAscii(p), p.subtract(world.loc));
+					else
+						draw(g, e.getTile(p).filter(world.getFilters(p)), p.subtract(world.loc));
+				}			
 			}	
 	}
 

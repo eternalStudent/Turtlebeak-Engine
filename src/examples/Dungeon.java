@@ -18,13 +18,21 @@ public class Dungeon {
 	private Dungeon(){
 		initialize();
 		int key =0;
+		game.updateVisual(player);
+		world.addAllUnfiltered(player.visual);
 		while( key != KeyEvent.VK_ESCAPE){
 			key = keyboard.get();
-			if (key == KeyEvent.VK_UP || key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_DOWN ){
+			if (key == KeyEvent.VK_UP || key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_DOWN 
+					|| key == KeyEvent.VK_END || key == KeyEvent.VK_PAGE_DOWN || key == KeyEvent.VK_PAGE_UP || 
+					key == KeyEvent.VK_HOME){
 				Point p = Keyboard.ArrowToPoint(key);
 				game.move(player, p);
 				setWorldLoc();
 			}
+			game.updateVisual(player);
+			world.unfilterAll();
+			world.filterAll(new FogOfWar());
+			world.addAllUnfiltered(player.visual);
 			board.repaint();
 		}
 	}
@@ -55,6 +63,7 @@ public class Dungeon {
 					Entity e = new Entity("wall");
 					e.add(p, 9);
 					e.passable = false;
+					e.transparent = false;
 					world.add(e);
 				}	
 		}	
@@ -69,11 +78,11 @@ public class Dungeon {
 		
 		game = new EventHandler(world);
 		
-		board.setScreen(world, new Point(15, 15));
+		board.setScreen(world, new Point(15, 15), false);
 	}
 	
 	public void setWorldLoc(){
-		world.loc = player.loc.get(0).subtract(7, 7);
+		world.loc = player.loc().subtract(7, 7);
 		if (world.loc.x<0)
 			world.loc = new Point(0, world.loc.y);
 		if (world.loc.y<0)

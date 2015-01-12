@@ -22,13 +22,17 @@ public class Board extends JFrame {
 		addKeyListener(keyboard);
 	}
 	
-	public void setScreen(World world, Point p){
+	public void setScreen(World world, Point p, boolean showAll){
 		width = p.x;
 		height = p.y;
-		getContentPane().add(new GameScreen(world, p), BorderLayout.CENTER);
+		getContentPane().add(new GameScreen(world, p, showAll), BorderLayout.CENTER);
 		pack();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(new java.awt.Point((screenSize.width-this.getWidth())/3, (screenSize.height-this.getHeight())/3));
+	}
+	
+	public void setScreen(World world, Point dim){
+		setScreen(world, dim, true);
 	}
 	
 	private Point calculateScreenBarDim(int size, String layout){
@@ -44,15 +48,15 @@ public class Board extends JFrame {
 		return p;
 	}
 	
-	public void addScreenBar(Tileset tileset, StringBuilder[] text, String layout, int cl, int bg){
-		Point dim = calculateScreenBarDim(text.length, layout);
+	public void addScreenBar(Tileset tileset, StringBuilder[] text, int size, String layout, int cl, int bg){
+		Point dim = calculateScreenBarDim(size, layout);
 		getContentPane().add(new TextScreenBar(tileset, dim, text, cl, bg), layout);
 		pack();
 	}
 	
-	public void addScreenBar(Tileset tileset, int[][] tiles, String layout){
-		Point p = calculateScreenBarDim(tiles.length, layout);
-		getContentPane().add(new TilesScreenBar(tileset, p, tiles), layout);
+	public void addScreenBar(Tileset tileset, int[][] tiles, int size, String layout){
+		Point dim = calculateScreenBarDim(size, layout);
+		getContentPane().add(new TilesScreenBar(tileset, dim, tiles), layout);
 		pack();
 	}
 
