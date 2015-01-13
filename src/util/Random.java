@@ -15,6 +15,10 @@ public class Random {
 		return x0+nextInt(x1-x0+1);
 	}
 	
+	public static int nextInt(Range range){
+		return nextInt(range.a, range.b);
+	}
+	
 	public static Point nextPoint(int x0, int x1, int y0, int y1){
 		return new Point(nextInt(x0, x1), nextInt(y0, y1));
 	}
@@ -36,6 +40,10 @@ public class Random {
 		for (int i=0; i<x1-x0; i++)
 			sum+=nextInt(2);
 		return sum;
+	}
+	
+	public static int normal(Range range){
+		return normal(range.a, range.b);
 	}
 	
 	public static <E> E nextElement(Collection<E> set){

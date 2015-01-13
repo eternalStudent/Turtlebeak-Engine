@@ -91,7 +91,7 @@ public class SnakeGame {
 			public Entity produce(Point p){
 				if (p.x*p.y*(p.x-31)*(p.y-31)==0){
 					Entity wall = new Entity("wall");
-					wall.add(p,  new ASCII(' ', 8, 3));
+					wall.add(p,  new ASCII('#', 2, 10));
 					wall.passable = false;
 					return wall;
 				}

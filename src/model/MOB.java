@@ -16,6 +16,8 @@ public class MOB extends Entity{
 	public Set<MOB> ties = new HashSet<>();
 	public Set<Point> visual = new HashSet<>();
 	public int vision = 5;
+	public Equipment eqp = new Equipment();
+	public Weapon naturalWeapon;
 
 	public MOB(String name) {
 		super(name);
@@ -38,7 +40,6 @@ public class MOB extends Entity{
 		m.snakelike = ((MOB)other).snakelike;
 		m.ai = ((MOB)other).ai.clone();
 		m.vision = ((MOB)other).vision;
-		//m.ai.mob = m;
 	}
 	
 	public static void fromText(String text, MOB m){

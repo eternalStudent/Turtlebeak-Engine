@@ -99,6 +99,12 @@ public class Line {
 		return current;
 	}
 	
+	public float slope(){
+		if (dirX == 0)
+			return 1/slope;
+		return slope;
+	}
+	
 	public String toString(){
 		return list.toString();
 	}

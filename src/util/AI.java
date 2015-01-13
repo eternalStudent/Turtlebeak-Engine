@@ -3,7 +3,7 @@ package util;
 import model.MOB;
 import model.World;
 
-public class AI implements Cloneable{
+public abstract class AI implements Cloneable{
 	
 	protected World world;
 	public MOB mob;
@@ -12,15 +12,15 @@ public class AI implements Cloneable{
 		this.world = world;
 	}
 	
+	public abstract boolean act();
+	
+	@Override
 	public AI clone(){
 		try {
 			return (AI) super.clone();
 		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	public boolean act(){return true;}
 }

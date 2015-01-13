@@ -93,6 +93,8 @@ public class Entity implements Comparable<Entity>{
 			e.ascii = Parser.readASCIIList(elem, "ASCII", new ArrayList<ASCII>());
 			if (type == 'm')
 				MOB.fromText(elem, (MOB)e);
+			if (type == 'i')
+				Item.fromText(text, (Item)e);
 			dict.put(e.name, e);
 		}
 	}

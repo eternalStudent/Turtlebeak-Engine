@@ -28,6 +28,7 @@ public class Frogger {
 	private final int[][] lifes = new int[1][3];
 	private final StringBuilder[] text = new StringBuilder[1];
 	private final List<MOB> frogs = new ArrayList<>();
+	int minY;
 	
 	public Frogger(){
 		initialize();
@@ -39,7 +40,6 @@ public class Frogger {
 			player.HP = 5;
 			player.add(new Point(7, 12), 4);
 			moveToStart();
-			int minY = 12;
 			for (MOB frog: frogs)
 				world.remove(frog);
 			frogs.clear();
@@ -60,7 +60,6 @@ public class Frogger {
 					}
 					moveToStart();
 					player.XP+=5;
-					minY = 12;
 				}
 				else{
 					if (player.loc().y<minY){
@@ -223,6 +222,7 @@ public class Frogger {
 		world.remove(player);
 		player.loc.set(0,  new Point(9, 12));
 		world.add(player);
+		minY = 12;
 	}
 	
 	private void loseLife(){

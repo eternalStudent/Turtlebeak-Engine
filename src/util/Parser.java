@@ -3,7 +3,9 @@ package util;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,6 +48,22 @@ public class Parser {
 			e.printStackTrace();
 		}
 		return initialValue;
+	}
+	
+	public static Map<String, Integer> read(String text){
+		Map<String, Integer> dict = new HashMap<>();
+		Pattern p = Pattern.compile("\\[.[^\\]]*\\]: -?\\d+");
+		Matcher m = p.matcher(text);			
+		while (m.find()){
+			try{
+				Object[] values = new MessageFormat("[.{0}]: {1, number, integer}").parse(m.group());
+				dict.put(values[0].toString(), objToInt(values[1]));
+			}
+			catch(ParseException e){
+				e.printStackTrace();
+			}
+		}	
+		return dict;
 	}
 	
 	public static double read(String text, String field, double initialValue){
@@ -118,7 +136,7 @@ public class Parser {
 		return initialValue;
 	}
 	
-	private static int ObjToInt(Object obj){
+	private static int objToInt(Object obj){
 		return Integer.parseInt(obj.toString());
 	}
 	
@@ -128,7 +146,7 @@ public class Parser {
 		if (m.find()) try{
 			String pattern = "["+field+"]: ({0,number,integer}, {1,number,integer}, {2,number,integer})";
 			Object[] values = new MessageFormat(pattern).parse(m.group());
-			return new ASCII(ObjToInt(values[0]), ObjToInt(values[1]), ObjToInt(values[2]));
+			return new ASCII(objToInt(values[0]), objToInt(values[1]), objToInt(values[2]));
 		}
 		catch(ParseException e){
 			e.printStackTrace();
@@ -158,13 +176,27 @@ public class Parser {
 		return initialValue;
 	}
 	
+	public static Range read(String text, String field, Range initialValue){
+		Pattern p = Pattern.compile("\\["+field+"\\]: \\[-?\\d+, -?\\d+\\)");
+		Matcher m = p.matcher(text);
+		if (m.find()) try{
+			String pattern = "["+field+"]: ({0,number,integer}, {1,number,integer})";
+			Object[] values = new MessageFormat(pattern).parse(m.group());
+			return new Range(objToInt(values[0]), objToInt(values[1]));
+		}
+		catch(ParseException e){
+			e.printStackTrace();
+		}
+		return initialValue;
+	}
+	
 	public static Point read(String text, String field, Point initialValue){
 		Pattern p = Pattern.compile("\\["+field+"\\]: \\(-?\\d+, -?\\d+\\)");
 		Matcher m = p.matcher(text);
 		if (m.find()) try{
 			String pattern = "["+field+"]: ({0,number,integer}, {1,number,integer})";
 			Object[] values = new MessageFormat(pattern).parse(m.group());
-			return new Point(ObjToInt(values[0]), ObjToInt(values[1]));
+			return new Point(objToInt(values[0]), objToInt(values[1]));
 		}
 		catch(ParseException e){
 			e.printStackTrace();
@@ -195,7 +227,7 @@ public class Parser {
 	}
 	
 //	public static void main(String[] args){
-//		System.out.println(read("[bloop]: (1, 2, 3)", "bloop", new ASCII(32, 1, 6)));
+//		System.out.println(read("[.bloop]: 8\n[.vloof]: -1"));
 //	}
 
 }

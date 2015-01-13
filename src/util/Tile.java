@@ -6,7 +6,7 @@ import java.util.List;
 public class Tile {
 	
 	public int number;
-	public List<Filter> filters;
+	public List<Filter> filters = new ArrayList<>();
 	
 	public Tile(int i){
 		this(i, new ArrayList<Filter>());
@@ -14,7 +14,7 @@ public class Tile {
 	
 	public Tile(int i, List<Filter> filters){
 		number = i;
-		this.filters = filters;
+		addAll(filters);
 	}
 	
 	public void addAll(List<Filter> filters){
