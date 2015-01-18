@@ -15,7 +15,7 @@ import util.Range;
 
 import com.google.common.io.Resources;
 
-public class Weapon {
+public class Weapon implements Cloneable{
 	
 	public static Map<String, Weapon> dict = new HashMap<>();
 	
@@ -44,21 +44,8 @@ public class Weapon {
 		}
 	}
 	
-	public static Weapon clone(Weapon other){
-		Weapon w = new Weapon(other.name);
-		w.type = other.type;
-		w.damage = new Range(other.damage.a, other.damage.b);
-		w.criticalChance = other.criticalChance;
-		w.criticalFactor = other.criticalFactor;
-		w.range = other.range;
-		w.timeCost = other.timeCost;
-		w.reloadCost = other.reloadCost;
-		w.damageDistribution = other.damageDistribution.clone();
-		return w;
-	}
-	
 	public static Weapon fromDict(String name){
-		return clone(dict.get(name));
+		return dict.get(name).clone();
 	}
 	
 	public static void fromResource(URL url) throws IOException{
@@ -75,6 +62,19 @@ public class Weapon {
 	
 	public boolean isCritical(){
 		return Random.nextInt(120)<criticalChance;
+	}
+	
+	@Override
+	public Weapon clone(){
+		Weapon w = new Weapon(name);
+		try {
+			w = (Weapon) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		w.damage = new Range(damage.a, damage.b);
+		w.damageDistribution = damageDistribution.clone();
+		return w;
 	}
 
 }

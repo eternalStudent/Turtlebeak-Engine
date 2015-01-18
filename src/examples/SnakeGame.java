@@ -14,6 +14,8 @@ import util.Lambda;
 import util.Point;
 import util.Random;
 import view.Board;
+import view.GameScreen;
+import view.TextScreenBar;
 
 public class SnakeGame {
 	
@@ -24,7 +26,7 @@ public class SnakeGame {
 	private MOB player;
 	private Item mouse;
 	private EventHandler game;
-	private StringBuilder[] screenBarText = new StringBuilder[1];
+	private String[] screenBarText = {""};
 	
 	private SnakeGame(){
 		initialize();
@@ -37,8 +39,7 @@ public class SnakeGame {
 			player.snakelike=true;
 			world.add(player);
 			while (key != KeyEvent.VK_ESCAPE && !player.isDead()){
-				screenBarText[0].delete(0, screenBarText[0].length());
-				screenBarText[0].append("score: "+Integer.toString(player.XP));
+				screenBarText[0]="score: "+Integer.toString(player.XP);
 				Point dir = new Point(0, 0);
 				if (keyboard.keypressed())
 					key = keyboard.get();
@@ -46,7 +47,7 @@ public class SnakeGame {
 					dir = Keyboard.ArrowToPoint(key);
 				if (!game.move(player, dir)){
 					player.HP=0;
-					screenBarText[0].append(" Game Over!");
+					screenBarText[0]+=" Game Over!";
 				}	
 				if (player.loc.get(player.loc.size()-1).equals(mouse.loc.get(0))){
 					player.loc.add(0, player.loc.get(0));
@@ -68,8 +69,7 @@ public class SnakeGame {
 				do {
 					key = keyboard.get();
 				}while (key != KeyEvent.VK_ENTER);
-			screenBarText[0].delete(0, screenBarText[0].length());
-			screenBarText[0].append("Play Again? (Y/N)");
+			screenBarText[0]="Play Again? (Y/N)";
 			board.repaint();
 			world.remove(player);
 			do{
@@ -108,9 +108,8 @@ public class SnakeGame {
 		
 		game = new EventHandler(world);
 		
-		board.setScreen(world, new Point(32, 32));
-		screenBarText[0] = new StringBuilder();
-		board.addScreenBar(tileset, screenBarText, 1, BorderLayout.NORTH, 7, 0);
+		board.addToPane(new GameScreen(world, new Point(32, 32)));
+		board.addToPane(new TextScreenBar(tileset, new Point(32, 1), screenBarText, 7, 0), BorderLayout.NORTH);
 	}
 
 	public static void main(String[] args) {

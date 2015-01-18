@@ -5,7 +5,7 @@ import java.util.Map;
 
 import util.Parser;
 
-public class EquipableItem extends Item {
+public class EquipableItem extends Item implements Cloneable{
 	
 	public String slot;
 	public Weapon weapon;
@@ -17,18 +17,6 @@ public class EquipableItem extends Item {
 		this.slot = slot;
 	}
 	
-	public static void copy(Entity entity, Entity otherEntity){
-		Item.copy(entity, otherEntity);
-		EquipableItem item = (EquipableItem)entity;
-		EquipableItem other =(EquipableItem)otherEntity;
-		item.slot = other.slot;
-		item.weapon = other.weapon;
-		if (other.inv != null){
-			item.inv = new Inventory(other.inv.space); 
-			item.inv.isAllowed = other.inv.isAllowed;
-		}	
-	}
-	
 	public static void fromText(String text, EquipableItem item){
 		Item.fromText(text, item);
 		item.slot = Parser.read(text, "slot", "");
@@ -37,9 +25,16 @@ public class EquipableItem extends Item {
 		item.bonuses = Parser.read(text);
 	}
 	
-	public static EquipableItem clone(EquipableItem other){
-		EquipableItem item = new EquipableItem(other.name, other.slot);
-		copy(item, other);
+	@Override
+	public EquipableItem clone(){
+		EquipableItem item = (EquipableItem) super.clone();
+		if (inv != null){
+			item.inv = new Inventory(inv.space); 
+			item.inv.isAllowed = inv.isAllowed; //a bit problematic
+		}
+		if (weapon != null)
+			item.weapon = weapon.clone();
+		item.bonuses = new HashMap<>(bonuses);
 		return item;
 	}
 

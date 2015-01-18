@@ -3,7 +3,7 @@ package model;
 import util.Lambda;
 import util.Parser;
 
-public class Item extends Entity {
+public class Item extends Entity implements Cloneable{
 	
 	public int weight, size;
 	public int amount = 1;
@@ -16,23 +16,10 @@ public class Item extends Entity {
 		type = 'i';
 	}
 	
-	public static void copy(Entity e, Entity other){
-		Item item = (Item)e;
-		item.weight = ((Item)other).weight;
-		item.size = ((Item)other).size;
-		item.amount = ((Item)other).amount;
-	}
-	
 	public static void fromText(String text, Item item){
 		item.weight = Parser.read(text, "weight", 0);
 		item.size = Parser.read(text, "size", 0);
 		item.amount = Parser.read(text, "amount", 1);
-	}
-	
-	public static Item clone(Item other){
-		Item item = new Item(other.name);
-		copy(item, other);
-		return item;
 	}
 	
 	public boolean use(){
@@ -45,6 +32,12 @@ public class Item extends Entity {
 		if (instant == null)
 			return false;
 		return instant.produce(0);
+	}
+	
+	@Override
+	public Item clone(){
+		Item item = (Item) super.clone();
+		return item;
 	}
 
 }

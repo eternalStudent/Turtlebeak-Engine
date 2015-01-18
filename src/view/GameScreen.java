@@ -13,10 +13,14 @@ public class GameScreen extends Screen {
 	private World world;
 	private boolean showAll;
 
-	protected GameScreen(World world, Point dim, boolean showAll) {
+	public GameScreen(World world, Point dim, boolean showAll) {
 		super(world.tileset, dim);
 		this.world = world;
 		this.showAll = showAll;
+	}
+	
+	public GameScreen(World world, Point dim) {
+		this(world, dim, true);
 	}
 	
 	public void paint(Graphics g){

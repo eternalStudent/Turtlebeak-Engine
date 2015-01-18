@@ -6,7 +6,7 @@ import util.AI;
 import util.Parser;
 import util.Point;
 
-public class MOB extends Entity{
+public class MOB extends Entity implements Cloneable{
 	
 	public boolean snakelike = false;
 	public int maxHP = 3;
@@ -33,26 +33,11 @@ public class MOB extends Entity{
 			this.loc.add(loc[i]);
 	}
 	
-	public static void copy(Entity e, Entity other){
-		MOB m = (MOB)e;
-		Entity.copy(m, other);
-		m.maxHP = ((MOB)other).maxHP;
-		m.snakelike = ((MOB)other).snakelike;
-		m.ai = ((MOB)other).ai.clone();
-		m.vision = ((MOB)other).vision;
-	}
-	
 	public static void fromText(String text, MOB m){
 		m.maxHP = Parser.read(text, "HP", 3);
 		m.HP = m.maxHP;
 		m.snakelike = Parser.read(text, "snake", false);
 		m.vision = Parser.read(text, "vision", 5);
-	}
-	
-	public static MOB clone(MOB other){
-		MOB m = new MOB(other.name);
-		copy(m, other);
-		return m;
 	}
 	
 	public Point loc(){
@@ -86,5 +71,18 @@ public class MOB extends Entity{
 	
 	public boolean isDead(){
 		return HP<=0;
+	}
+	
+	@Override
+	public MOB clone(){
+		MOB m = (MOB) super.clone();
+		m.ties = new HashSet<>();
+		m.visual = new HashSet<>();
+		m.eqp = new Equipment();
+		if (ai != null)
+			m.ai = ai.clone();
+		if (naturalWeapon != null)
+			m.naturalWeapon = naturalWeapon.clone();
+		return m;
 	}
 }

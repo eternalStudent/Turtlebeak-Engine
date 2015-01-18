@@ -59,5 +59,9 @@ public class EventHandler {
 			}
 		}	
 	}
+	
+	public boolean pickItem(MOB mob, Item item){
+		return mob.eqp.add(item);
+	}
 
 }

@@ -15,6 +15,9 @@ import util.Lambda;
 import util.Point;
 import util.Tileset;
 import view.Board;
+import view.GameScreen;
+import view.TextScreenBar;
+import view.TilesScreenBar;
 import controller.Keyboard;
 
 public class Frogger {
@@ -26,7 +29,7 @@ public class Frogger {
 	private EventHandler game;
 	private final List<MOB> mobs = new ArrayList<>();
 	private final int[][] lifes = new int[1][3];
-	private final StringBuilder[] text = new StringBuilder[1];
+	private final String[] text = {""};
 	private final List<MOB> frogs = new ArrayList<>();
 	int minY;
 	
@@ -68,8 +71,7 @@ public class Frogger {
 					}
 				}
 			
-				text[0].delete(0, text[0].length());
-				text[0].append("score: "+Integer.toString(player.XP));
+				text[0]="score: "+Integer.toString(player.XP);
 			
 				//player plays
 				if (keyboard.keypressed()){
@@ -78,9 +80,9 @@ public class Frogger {
 						Point dir = Keyboard.ArrowToPoint(key);
 						if (!game.move(player, dir))
 							loseLife();
-						for (Entity e: world.get(player.loc()))
-							if (e!=player && e.getClass().getName().equals("model.MOB")){
-								((MOB)e).ties.add(player);
+						for (MOB mob: world.getMOBs(player.loc))
+							if (mob!=player){
+								mob.ties.add(player);
 							}	
 					}
 				}
@@ -103,14 +105,13 @@ public class Frogger {
 				}
 			}
 			if (player.isDead()){
-				text[0].append(" Game Over!");
+				text[0]+=" Game Over!";
 				board.repaint();
 				do {
 					key = keyboard.get();
 				}while(key != KeyEvent.VK_ENTER);
-			}	
-			text[0].delete(0, text[0].length());
-			text[0].append("Play Again? (Y/N)");
+			}
+			text[0]="Play Again? (Y/N)";
 			board.repaint();
 			world.remove(player);
 			do{
@@ -185,10 +186,9 @@ public class Frogger {
 		place("log3", 3, 5, 1);
 		
 		game = new EventHandler(world);
-		board.setScreen(world, new Point(20, 13));
-		board.addScreenBar(tileset, lifes, 1, BorderLayout.SOUTH);
-		text[0] = new StringBuilder();
-		board.addScreenBar(tileset, text, 1, BorderLayout.NORTH, 12, 0);
+		board.addToPane(new GameScreen(world, new Point(20, 13)), BorderLayout.CENTER);
+		board.addToPane(new TilesScreenBar(tileset, new Point(20, 1), lifes), BorderLayout.SOUTH);
+		board.addToPane(new TextScreenBar(tileset, new Point(20, 1), text, 12, 0), BorderLayout.NORTH);
 	}
 	
 	private AI newAI(int dir, int wait){

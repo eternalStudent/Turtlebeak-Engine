@@ -55,6 +55,33 @@ public class World {
 		entities.remove(e);
 	}
 	
+	public List<MOB> getMOBs(List<Point> loc){
+		List<MOB> list = new ArrayList<>();
+		for (Point p: loc){
+			for (Entity e: get(p)){
+				if (e instanceof MOB)
+					list.add((MOB)e);
+			}
+		}
+		return list;
+	}
+	
+	public List<Item> getItems(Point p){
+		List<Item> list = new ArrayList<>();
+		for (Entity e: get(p))
+			if (e instanceof Item)
+				list.add((Item)e);
+		return list;
+	}
+	
+	public List<Item> getItems(List<Point> loc){
+		List<Item> list = new ArrayList<>();
+		for (Point p: loc){
+			list.addAll(getItems(p));
+		}
+		return list;
+	}
+	
 	public boolean passable(List<Point> loc){
 		for (Point p: loc){
 			List<Entity> list = get(p);

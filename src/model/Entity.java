@@ -17,13 +17,13 @@ import util.Tile;
 import util.Tileset;
 import util.ASCII;
 
-public class Entity implements Comparable<Entity>{
+public class Entity implements Comparable<Entity>, Cloneable{
 	
 	public static Map<String, Entity> dict = new HashMap<>();
 	
 	public String name;
-	protected char type = 'e';
 	public Double zLevel = 0.0;
+	protected char type = 'e';
 	
 	public boolean passable = true;
 	public boolean solid = false;
@@ -37,37 +37,19 @@ public class Entity implements Comparable<Entity>{
 	public Entity(String name){
 		this.name = name;
 	}
-
-	public static void copy(Entity e, Entity other){
-		e.name = other.name;
-		e.ascii = other.ascii;
-		e.passable = other.passable;
-		e.solid = other.solid;
-		e.zLevel = other.zLevel;
-		e.spritesheet = other.spritesheet;
-		e.tiles = other.tiles;
-		e.transparent = other.transparent;
-	}
 	
 	public static Entity factory(char ch){
 		switch (ch){
 		case 'm': return new MOB(null);
 		case 'i': return new Item(null);
+		case 'q': return new EquipableItem(null, null);
 		default: return new Entity(null);
 		}
 	}
 	
-	public static Entity clone(Entity other){
-		Entity e = factory(other.type);
-		copy(e, other);
-		if (e.type == 'm'){
-			MOB.copy((MOB)e, other);
-		} 
-		return e;
-	}
 	
 	public static Entity fromDict(String name){
-		return clone(dict.get(name));
+		return dict.get(name).clone();
 	}
 	
 	private static List<Tile> toTiles(List<Integer> list){
@@ -91,10 +73,12 @@ public class Entity implements Comparable<Entity>{
 			e.zLevel = Parser.read(elem, "sort", e.zLevel);
 			e.tiles = toTiles(Parser.readIntList(elem, "tiles", new ArrayList<Integer>()));
 			e.ascii = Parser.readASCIIList(elem, "ASCII", new ArrayList<ASCII>());
-			if (type == 'm')
+			if (e instanceof MOB)
 				MOB.fromText(elem, (MOB)e);
-			if (type == 'i')
+			if (e instanceof Item)
 				Item.fromText(text, (Item)e);
+			if (e instanceof EquipableItem)
+				EquipableItem.fromText(text, (EquipableItem)e);
 			dict.put(e.name, e);
 		}
 	}
@@ -127,6 +111,20 @@ public class Entity implements Comparable<Entity>{
 	public void add(Point loc, int tile){
 		this.loc.add(loc);
 		this.tiles.add(new Tile (tile));
+	}
+	
+	@Override
+	public Entity clone(){
+		Entity e = new Entity(name);
+		try {
+			e = (Entity) super.clone();
+		} catch (CloneNotSupportedException ex) {
+			ex.printStackTrace();
+		}
+		e.ascii = new ArrayList<>(ascii);
+		e.loc = new ArrayList<>();
+		e.tiles = new ArrayList<>(tiles);
+		return e;
 	}
 		
 	@Override

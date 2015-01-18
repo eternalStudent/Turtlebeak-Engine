@@ -4,6 +4,7 @@ import model.Entity;
 import model.World;
 import util.*;
 import view.Board;
+import view.GameScreen;
 
 public class ShowMap {
 	
@@ -32,8 +33,8 @@ public class ShowMap {
 		};
 		world = new World(tileset, defaultTerrain);
 		//Maze dungeon = new Maze(20, 20, 3);
-		//BSPDungeon dungeon = new BSPDungeon(61, 61);
-		CellularAutomataMap dungeon = new CellularAutomataMap(61, 61);
+		BSPDungeon dungeon = new BSPDungeon(61, 61);
+		//CellularAutomataMap dungeon = new CellularAutomataMap(61, 61);
 		for (int x=0; x<61; x++)
 			for (int y=0; y<61; y++){
 				Point p = new Point(x, y);
@@ -44,7 +45,7 @@ public class ShowMap {
 				}	
 		}
 		
-		board.setScreen(world, new Point(61, 61));
+		board.addToPane(new GameScreen(world, new Point(61, 61)));
 	}
 	
 	public static void main(String[] args){

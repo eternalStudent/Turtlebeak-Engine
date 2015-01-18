@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import model.*;
 import util.*;
 import view.Board;
+import view.GameScreen;
 import controller.Keyboard;
 
 public class Dungeon {
@@ -78,7 +79,7 @@ public class Dungeon {
 		
 		game = new EventHandler(world);
 		
-		board.setScreen(world, new Point(15, 15), false);
+		board.addToPane(new GameScreen(world, new Point(15, 15), false));
 	}
 	
 	public void setWorldLoc(){

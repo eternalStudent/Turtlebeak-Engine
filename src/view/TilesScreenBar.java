@@ -11,7 +11,7 @@ public class TilesScreenBar extends Screen {
 
 	int[][] tiles;
 	
-	protected TilesScreenBar(Tileset tileset, Point dim, int[][] tiles) {
+	public TilesScreenBar(Tileset tileset, Point dim, int[][] tiles) {
 		super(tileset, dim);
 		this.tiles = tiles;
 	}

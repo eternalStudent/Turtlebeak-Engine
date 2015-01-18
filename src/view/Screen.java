@@ -1,5 +1,4 @@
 package view;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -17,15 +16,20 @@ public abstract class Screen extends JPanel{
 	protected Tileset tileset;
 	protected Dimension dim;
 	protected Font font;
+	protected int bg;
 	
-	protected Screen(Tileset tileset, Point p){
+	protected Screen(Tileset tileset, Point dim, int bg){
 		super();
 		this.tileset = tileset;
 		font = new Font(Font.SANS_SERIF, Font.PLAIN, tileset.th);
-		setBackground(Color.BLACK);
-		dim = new Dimension(p.x, p.y);
-		p = tileset.toScreen.produce(p);
-		setPreferredSize(new Dimension(p.x, p.y));
+		setBackground(tileset.color(bg));
+		this.dim = new Dimension(dim.x, dim.y);
+		dim = tileset.toScreen.produce(dim);
+		setPreferredSize(new Dimension(dim.x, dim.y));
+	}
+	
+	protected Screen(Tileset tileset, Point dim){
+		this(tileset, dim, 0);
 	}
 	
 	protected void writeTF(Graphics g, String st, int x, int y, int color){
@@ -53,13 +57,17 @@ public abstract class Screen extends JPanel{
 	}
 	
 	protected void writeChar(Graphics g, char ch, int x, int y, int cl){
-		draw(g, new ASCII((int)ch, cl, 0), x, y);
+		draw(g, new ASCII((int)ch, cl, bg), x, y);
 	}
 	
 	protected void write(Graphics g, String st, int x0, int y0, int cl){
-		char[] charrArr = st.toCharArray();
-		for (int x=0; x<charrArr.length; x++)
-			writeChar(g, charrArr[x], x0+x, y0, cl);
+		if (!tileset.ASCII)
+			writeTF(g, st, x0, y0, cl);
+		else{
+			char[] charrArr = st.toCharArray();
+			for (int x=0; x<charrArr.length; x++)
+				writeChar(g, charrArr[x], x0+x, y0, cl);
+		}	
 	}
 	
 	public void paint(Graphics g){
