@@ -122,12 +122,7 @@ public class Frogger {
 	}	
 	
 	private void initialize(){
-		Lambda<Point, Point> toScreen = new Lambda<Point, Point>(){
-			public Point produce(Point p){
-				return new Point(p.x*32, p.y*32);
-			}
-		};
-		Tileset tileset = new Tileset("frogger.png", 32, 32, toScreen);
+		Tileset tileset = new Tileset("frogger.png", 32, 32);
 		tileset.setTransparentBackground(-16777216);
 		Lambda<Point, Entity> defaultTerrain = new Lambda<Point, Entity>(){
 			public Entity produce(Point p){

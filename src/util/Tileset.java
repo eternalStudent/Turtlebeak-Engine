@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,30 +17,37 @@ public class Tileset {
 
 	private BufferedImage image = null;
 	public int cols, tw, th;
-	public final String path;
 	public Lambda<Point, Point> toScreen;
 	public boolean ASCII = false;
-	private int[] palette = {-16777216, -16777088, -16744448, -16744320, -8388608, -8388480, -8355840, -4144960, -8355712, -16776961, -16711936, -16711681, -65536, -65281, -256, -1};
+	public int[] palette = {-16777216, -16777088, -16744448, -16744320, -8388608, -8388480, -8355840, -4144960, -8355712, -16776961, -16711936, -16711681, -65536, -65281, -256, -1};
 	private Map<ASCII, BufferedImage> ASCIIdict = new HashMap<>();
 	private Map<Tile, BufferedImage> TileDict = new HashMap<>();
 	private BufferedImage[] subImage;
 	
-	public Tileset(String pathname, int tw, int th, Lambda<Point, Point> toScreen){
+	public Tileset(String pathname, int tw, int th){
 		try { image = ImageIO.read(new File(pathname)); } 
-		catch (IOException e) { e.printStackTrace(); }	
-		path=pathname;
+		catch (IOException e) { e.printStackTrace(); }
+		initialize(tw, th);
+	}
+	
+	public Tileset(URL url, int tw, int th){
+		try { image = ImageIO.read(url); } 
+		catch (IOException e) { e.printStackTrace(); }
+		initialize(tw, th);
+	}
+	
+	private void initialize(int tw, int th){
 		this.tw=tw;
 		this.th=th;
 		cols = image.getWidth()/tw;
 		subImage = new BufferedImage[cols*image.getHeight()/th];
 		for (int i=0; i<subImage.length; i++)
 			subImage[i] = image.getSubimage((i%cols)*tw, (i/cols)*th, tw, th);
-		this.toScreen = toScreen;
-	}
-	
-	public Tileset(String pathname, int tw, int th,Lambda<Point, Point> toScreen, int[] palette){
-		this(pathname, tw, th, toScreen);
-		this.palette = palette;
+		this.toScreen = new Lambda<Point, Point>(){
+			public Point produce(Point p){
+				return new Point(p.x*tw, p.y*th);
+			}
+		};
 	}
 	
 	public void setTransparentBackground(int rgb){
@@ -96,10 +104,6 @@ public class Tileset {
 	
 	public Color color(int i){
 		return new Color(palette[i]);
-	}
-	
-	public String toString(){
-		return path+" "+tw+" "+th;
 	}
 	
 }

@@ -21,12 +21,14 @@ public class Weapon implements Cloneable{
 	
 	public String name, type;
 	public Range damage;
+	public boolean twoHanded = false;
 	public int criticalChance, range, timeCost, reloadCost, criticalFactor;
 	public Distribution damageDistribution = new Distribution(){
 		public int produce(Range damage){
 			return Random.normal(damage.a, damage.b);
 		}
 	};
+	public Item item;
 	
 	public Weapon(String name){
 		this.name = name;
@@ -40,6 +42,13 @@ public class Weapon implements Cloneable{
 			Weapon w = new Weapon("");
 			w.name = Parser.read(elem, "name", "");
 			w.type = Parser.read(elem, "type", "");
+			w.damage = Parser.read(text, "damage", new Range(0, 0));
+			w.criticalChance = Parser.read(text, "critical chance", 0);
+			w.criticalFactor = Parser.read(text, "critical factor", 120);
+			w.timeCost = Parser.read(text, "time", 0);
+			w.range = Parser.read(text, "range", 1);
+			w.reloadCost = Parser.read(text, "reload", 0);
+			w.twoHanded = Parser.read(text, "two handed", false);
 			dict.put(w.name, w);
 		}
 	}
@@ -57,7 +66,7 @@ public class Weapon implements Cloneable{
 	}
 	
 	public int criticalDamage(){
-		return (criticalFactor*damage())/120;
+		return ((120+criticalFactor)*damage())/120;
 	}
 	
 	public boolean isCritical(){

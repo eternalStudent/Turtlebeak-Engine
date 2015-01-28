@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Equipment {
 	
@@ -19,16 +20,31 @@ public class Equipment {
 		return dict.get(slot);
 	}
 	
-	public EquipableItem equip(EquipableItem item){
-		return dict.put(item.slot, item);
+	public boolean equip(EquipableItem item, Set<String> slots){
+		if (!item.slots.contains(slots))
+			return false;
+		for (String slot: slots){
+			if (dict.containsKey(slot))
+				return false;
+		}
+		item.currentSlots = slots;
+		for (String slot: slots){
+			dict.put(slot, item);
+		}
+		return true;
 	}
 	
 	public boolean isEmpty(String slot){
 		return get(slot)==null;
 	}
 	
-	public boolean unequip(EquipableItem item){
-		return onFloor.add(dict.remove(item.slot));
+	public void unequip(EquipableItem item){
+		Set<String> slots = item.currentSlots;
+		item.currentSlots = null;
+		for (String slot: slots){
+			dict.remove(slot);
+		}
+		onFloor.add(item);
 	}
 
 }

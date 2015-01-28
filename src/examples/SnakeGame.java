@@ -80,12 +80,7 @@ public class SnakeGame {
 	}
 	
 	private void initialize(){
-		Lambda<Point, Point> toScreen = new Lambda<Point, Point>(){
-			public Point produce(Point p){
-				return new Point(p.x*12, p.y*12);
-			}
-		};
-		Tileset tileset = new Tileset("tileset1.png", 12, 12, toScreen);
+		Tileset tileset = new Tileset("tileset1.png", 12, 12);
 		tileset.ASCII = true;
 		Lambda<Point, Entity> defaultTerrain = new Lambda<Point, Entity>(){
 			public Entity produce(Point p){

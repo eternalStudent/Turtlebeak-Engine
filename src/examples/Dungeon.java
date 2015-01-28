@@ -39,12 +39,7 @@ public class Dungeon {
 	}
 	
 	private void initialize(){
-		Lambda<Point, Point> toScreen = new Lambda<Point, Point>(){
-			public Point produce(Point p){
-				return new Point(p.x*32, p.y*32);
-			}
-		};
-		Tileset tileset = new Tileset("tileset2.png", 32, 32, toScreen);
+		Tileset tileset = new Tileset("tileset2.png", 32, 32);
 		tileset.setTransparentBackground(-16777216);
 		Lambda<Point, Entity> defaultTerrain = new Lambda<Point, Entity>(){
 			public Entity produce(Point p){
@@ -55,8 +50,8 @@ public class Dungeon {
 		};
 		world = new World(tileset, defaultTerrain);
 		//Maze dungeon = new Maze(20, 20, 3);
-		//BSPDungeon dungeon = new BSPDungeon(61, 61);
-		CellularAutomataMap dungeon = new CellularAutomataMap(61, 61);
+		BSPDungeon dungeon = new BSPDungeon(61, 61);
+		//CellularAutomataMap dungeon = new CellularAutomataMap(61, 61);
 		for (int x=0; x<61; x++)
 			for (int y=0; y<61; y++){
 				Point p = new Point(x, y);
