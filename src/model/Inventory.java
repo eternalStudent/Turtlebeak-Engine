@@ -7,11 +7,11 @@ import util.Lambda;
 
 public class Inventory {
 	
-	public int size, weight, space;
+	public float size, weight, space;
 	private List<Item> list = new ArrayList<>();
 	public Lambda<Item, Boolean> isAllowed;
 	
-	public Inventory(int space){
+	public Inventory(float space){
 		this.space = space;
 	}
 	

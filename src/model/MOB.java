@@ -19,6 +19,8 @@ public class MOB extends Entity implements Cloneable{
 	public Equipment eqp = new Equipment();
 	public Weapon naturalWeapon;
 
+	protected MOB(){this(null);}
+	
 	public MOB(String name) {
 		super(name);
 		zLevel = 2.0;

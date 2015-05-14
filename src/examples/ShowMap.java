@@ -28,8 +28,8 @@ public class ShowMap {
 		};
 		world = new World(tileset, defaultTerrain);
 		//Maze dungeon = new Maze(20, 20, 3);
-		BSPDungeon dungeon = new BSPDungeon(61, 61);
-		//CellularAutomataMap dungeon = new CellularAutomataMap(61, 61);
+		//BSPDungeon dungeon = new BSPDungeon(61, 61);
+		CellularAutomataMap dungeon = new CellularAutomataMap(61, 61);
 		for (int x=0; x<61; x++)
 			for (int y=0; y<61; y++){
 				Point p = new Point(x, y);

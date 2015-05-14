@@ -5,11 +5,13 @@ import util.Parser;
 
 public class Item extends Entity implements Cloneable{
 	
-	public int weight, size;
+	public float weight, size;
 	public int amount = 1;
 	public Lambda<Integer, Boolean> usage;
 	public Lambda<Integer, Boolean> instant;
 
+	protected Item(){this(null);}
+	
 	public Item(String name) {
 		super(name);
 		zLevel = 1.0;

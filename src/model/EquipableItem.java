@@ -14,9 +14,10 @@ public class EquipableItem extends Item implements Cloneable{
 	public Inventory inv;
 	public Map<String,Integer> bonuses = new HashMap<>();
 
-	public EquipableItem(String name, String slot) {
+	protected EquipableItem(){this(null);}
+	
+	public EquipableItem(String name) {
 		super(name);
-		//this.slot = slot;
 	}
 	
 	public static void fromText(String text, EquipableItem item){

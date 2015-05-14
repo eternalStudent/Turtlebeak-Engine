@@ -34,16 +34,18 @@ public class Entity implements Comparable<Entity>, Cloneable{
 	public List<Tile> tiles = new ArrayList<>();
 	public Tileset spritesheet;
 	
+	protected Entity(){}
+	
 	public Entity(String name){
 		this.name = name;
 	}
 	
 	public static Entity factory(char ch){
 		switch (ch){
-		case 'm': return new MOB(null);
-		case 'i': return new Item(null);
-		case 'q': return new EquipableItem(null, null);
-		default: return new Entity(null);
+		case 'm': return new MOB();
+		case 'i': return new Item();
+		case 'q': return new EquipableItem();
+		default: return new Entity();
 		}
 	}
 	
