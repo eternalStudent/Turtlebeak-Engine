@@ -21,6 +21,7 @@ public class Dungeon {
 		int key =0;
 		game.updateVisual(player);
 		world.addAllUnfiltered(player.visual);
+		board.repaint();
 		while( key != KeyEvent.VK_ESCAPE){
 			key = keyboard.get();
 			if (key == KeyEvent.VK_UP || key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_DOWN 
@@ -41,8 +42,8 @@ public class Dungeon {
 	private void initialize(){
 		Tileset tileset = new Tileset("tileset2.png", 32, 32);
 		tileset.setTransparentBackground(-16777216);
-		Lambda<Point, Entity> defaultTerrain = new Lambda<Point, Entity>(){
-			public Entity produce(Point p){
+		Function<Point, Entity> defaultTerrain = new Function<Point, Entity>(){
+			public Entity eval(Point p){
 				Entity e = new Entity("floor");
 				e.add(p, 30);	
 				return e;
@@ -65,7 +66,10 @@ public class Dungeon {
 		}	
 		
 		player = new MOB("player");
-		player.add(new Point(1, 1), 74);
+		player.spritesheet = new Tileset("spritesheet.png", 32, 32);
+		player.spritesheet.setTransparentBackground(-1);
+		System.out.println(player.spritesheet.getTileImage(new Tile(0)).getRGB(0, 0));
+		player.add(new Point(1, 1), 7);
 		while(!world.passable(player.loc)){
 			player.loc.set(0, Random.nextPoint(61, 61));
 		}
@@ -73,6 +77,18 @@ public class Dungeon {
 		setWorldLoc();
 		
 		game = new EventHandler(world);
+		game.move = new VectorFunction<Boolean>(){
+
+			@Override
+			public Boolean eval(Object... objs) {
+				MOB mob = (MOB) objs[0];
+				Point dir = (Point) objs[1];
+				Boolean temp = (Boolean) objs[2];
+				mob.tiles.get(0).number = (dir.y+1)*3+(dir.x+1);
+				return temp;
+			}
+			
+		};
 		
 		board.addToPane(new GameScreen(world, new Point(15, 15), false));
 	}

@@ -10,7 +10,7 @@ import model.MOB;
 import util.ASCII;
 import util.Tileset;
 import model.World;
-import util.Lambda;
+import util.Function;
 import util.Point;
 import util.Random;
 import view.Board;
@@ -82,8 +82,8 @@ public class SnakeGame {
 	private void initialize(){
 		Tileset tileset = new Tileset("tileset1.png", 12, 12);
 		tileset.ASCII = true;
-		Lambda<Point, Entity> defaultTerrain = new Lambda<Point, Entity>(){
-			public Entity produce(Point p){
+		Function<Point, Entity> defaultTerrain = new Function<Point, Entity>(){
+			public Entity eval(Point p){
 				if (p.x*p.y*(p.x-31)*(p.y-31)==0){
 					Entity wall = new Entity("wall");
 					wall.add(p,  new ASCII('#', 2, 10));

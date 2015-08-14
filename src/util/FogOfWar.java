@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 public class FogOfWar extends Filter {
 
 	@Override
-	public BufferedImage produce(BufferedImage image) {
+	public BufferedImage eval(BufferedImage image) {
 		for (int x=0; x<image.getWidth(); x++)
 			for (int y=0; y<image.getHeight(); y++){
 				Color cl = new Color(image.getRGB(x, y));

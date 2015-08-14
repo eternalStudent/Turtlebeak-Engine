@@ -11,7 +11,7 @@ import model.EventHandler;
 import model.MOB;
 import model.World;
 import util.AI;
-import util.Lambda;
+import util.Function;
 import util.Point;
 import util.Tileset;
 import view.Board;
@@ -124,8 +124,8 @@ public class Frogger {
 	private void initialize(){
 		Tileset tileset = new Tileset("frogger.png", 32, 32);
 		tileset.setTransparentBackground(-16777216);
-		Lambda<Point, Entity> defaultTerrain = new Lambda<Point, Entity>(){
-			public Entity produce(Point p){
+		Function<Point, Entity> defaultTerrain = new Function<Point, Entity>(){
+			public Entity eval(Point p){
 				Entity e = new Entity(null);
 				if (p.y<6){
 					if (p.x % 4 == 1 && p.y == 0){

@@ -94,7 +94,6 @@ public class Entity implements Comparable<Entity>, Cloneable{
 	}
 	
 	public Tile getTile(Point p){
-	
 		return tiles.get(loc.indexOf(p));
 	}
 	
@@ -112,7 +111,7 @@ public class Entity implements Comparable<Entity>, Cloneable{
 	
 	public void add(Point loc, int tile){
 		this.loc.add(loc);
-		this.tiles.add(new Tile (tile));
+		this.tiles.add(new Tile (tile, spritesheet));
 	}
 	
 	@Override

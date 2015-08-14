@@ -10,14 +10,14 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import util.Lambda;
+import util.Function;
 import util.Point;
 
 public class Tileset {
 
 	private BufferedImage image = null;
 	public int cols, tw, th;
-	public Lambda<Point, Point> toScreen;
+	public Function<Point, Point> toScreen;
 	public boolean ASCII = false;
 	public int[] palette = {-16777216, -16777088, -16744448, -16744320, -8388608, -8388480, -8355840, -4144960, -8355712, -16776961, -16711936, -16711681, -65536, -65281, -256, -1};
 	private Map<ASCII, BufferedImage> ASCIIdict = new HashMap<>();
@@ -28,6 +28,7 @@ public class Tileset {
 		try { image = ImageIO.read(new File(pathname)); } 
 		catch (IOException e) { e.printStackTrace(); }
 		initialize(tw, th);
+		
 	}
 	
 	public Tileset(URL url, int tw, int th){
@@ -39,28 +40,35 @@ public class Tileset {
 	private void initialize(int tw, int th){
 		this.tw=tw;
 		this.th=th;
+		image = duplicate(image);
 		cols = image.getWidth()/tw;
 		subImage = new BufferedImage[cols*image.getHeight()/th];
 		for (int i=0; i<subImage.length; i++)
 			subImage[i] = image.getSubimage((i%cols)*tw, (i/cols)*th, tw, th);
-		this.toScreen = new Lambda<Point, Point>(){
-			public Point produce(Point p){
+		this.toScreen = new Function<Point, Point>(){
+			public Point eval(Point p){
 				return new Point(p.x*tw, p.y*th);
 			}
 		};
 	}
 	
 	public void setTransparentBackground(int rgb){
-		for (int x=0; x<image.getWidth(); x++)
-			for (int y=0; y<image.getHeight(); y++)
-				if (image.getRGB(x,  y) == rgb)
-					image.setRGB(x, y, 0);
+		
+		for (int i=0; i<subImage.length; i++){
+			BufferedImage sub = subImage[i];
+			for (int x=0; x<sub.getWidth(); x++)
+				for (int y=0; y<sub.getHeight(); y++)
+					if (sub.getRGB(x, y) == rgb)
+						sub.setRGB(x, y, 0);
+		}
 	}
 	
 	private BufferedImage duplicate(BufferedImage image) {
-		BufferedImage j = new BufferedImage(tw, th, BufferedImage.TYPE_INT_ARGB);
-		for (int x=0; x<tw; x++)
-			for (int y=0; y<th; y++)
+		int width = image.getWidth();
+		int height = image.getHeight();
+		BufferedImage j = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		for (int x=0; x<width; x++)
+			for (int y=0; y<height; y++)
 				j.setRGB(x,y,image.getRGB(x,y));
 		return j;
 	}
@@ -79,7 +87,7 @@ public class Tileset {
 	public BufferedImage getTileImage(int i, List<Filter> filters){
 		BufferedImage img = duplicate(getSubImage(i));
 		for (Filter filter: filters){
-			filter.produce(img);
+			filter.eval(img);
 		}
 		return img;
 	}

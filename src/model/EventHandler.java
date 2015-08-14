@@ -5,10 +5,13 @@ import java.util.List;
 import model.MOB;
 import util.Line;
 import util.Point;
+import util.VectorFunction;
 
 public class EventHandler {
 	
 	private World world;
+	public VectorFunction<Boolean> move;
+	public VectorFunction<Boolean> pick;
 	
 	public EventHandler(World world){
 		this.world = world;
@@ -28,7 +31,9 @@ public class EventHandler {
 		world.add(mob);
 		for (MOB m: mob.ties)
 			move(m, dir);
-		return temp;
+		if (move == null)
+			return temp;
+		return move.eval(mob, dir, temp);
 	}
 	
 	public boolean inSight(Point loc, int x, int y){
@@ -61,7 +66,10 @@ public class EventHandler {
 	}
 	
 	public boolean pickItem(MOB mob, Item item){
-		return mob.eqp.add(item);
+		boolean temp = mob.eqp.add(item); 
+		if (pick == null)
+			return temp;
+		return pick.eval(mob, item, temp);
 	}
 
 }

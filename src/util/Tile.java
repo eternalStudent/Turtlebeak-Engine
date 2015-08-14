@@ -1,5 +1,6 @@
 package util;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,13 +8,20 @@ public class Tile {
 	
 	public int number;
 	public List<Filter> filters = new ArrayList<>();
+	public Tileset spritesheet;
 	
 	public Tile(int i){
-		this(i, new ArrayList<Filter>());
+		this(i, null, new ArrayList<Filter>());
 	}
 	
-	public Tile(int i, List<Filter> filters){
+	public Tile(int i, Tileset spritesheet){
+		this(i, spritesheet, new ArrayList<Filter>());
+		
+	}
+	
+	public Tile(int i, Tileset spritesheet,List<Filter> filters){
 		number = i;
+		this.spritesheet = spritesheet;
 		addAll(filters);
 	}
 	
@@ -22,9 +30,13 @@ public class Tile {
 	}
 	
 	public Tile filter(List<Filter> filters){
-		Tile tile = new Tile(this.number, filters);
+		Tile tile = new Tile(this.number, spritesheet, filters);
 		tile.addAll(this.filters);
 		return tile;
+	}
+	
+	public BufferedImage getTileImage(){
+		return spritesheet.getTileImage(this);
 	}
 	
 	@Override

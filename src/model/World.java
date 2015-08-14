@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import util.Filter;
-import util.Lambda;
+import util.Function;
 import util.Point;
 import util.SortedList;
 import util.Tileset;
@@ -14,13 +14,13 @@ import util.Tileset;
 public class World {
 
 	public Tileset tileset;
-	public Lambda<Point, Entity> defaultTerrain;
+	public Function<Point, Entity> defaultTerrain;
 	public List<Entity> entities = new SortedList<>();
 	public Point loc = new Point(0,0);
 	private Map<Point, List<Entity>> dict = new HashMap<>();
 	private Map<Point, List<Filter>> visual = new HashMap<>();
 	
-	public World(Tileset tileset, Lambda<Point, Entity> defaultTerrain){
+	public World(Tileset tileset, Function<Point, Entity> defaultTerrain){
 		this.tileset = tileset;
 		this.defaultTerrain = defaultTerrain;
 	}
@@ -28,7 +28,7 @@ public class World {
 	public synchronized List<Entity> get(Point p){
 		if (dict.get(p) == null){
 			List<Entity> es = new ArrayList<>();
-			Entity e = defaultTerrain.produce(p);
+			Entity e = defaultTerrain.eval(p);
 			es.add(e);
 			dict.put(p, es);
 			entities.add(e);
@@ -125,7 +125,7 @@ public class World {
 	}
 	
 	public Point toScreen(Point p){
-		return tileset.toScreen.produce(p);
+		return tileset.toScreen.eval(p);
 	}
 	
 }

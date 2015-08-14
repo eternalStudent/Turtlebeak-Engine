@@ -1,14 +1,14 @@
 package model;
 
-import util.Lambda;
+import util.Function;
 import util.Parser;
 
 public class Item extends Entity implements Cloneable{
 	
 	public float weight, size;
 	public int amount = 1;
-	public Lambda<Integer, Boolean> usage;
-	public Lambda<Integer, Boolean> instant;
+	public Function<Integer, Boolean> usage;
+	public Function<Integer, Boolean> instant;
 
 	protected Item(){this(null);}
 	
@@ -27,13 +27,13 @@ public class Item extends Entity implements Cloneable{
 	public boolean use(){
 		if (usage == null)
 			return false;
-		return usage.produce(0);
+		return usage.eval(0);
 	}
 	
 	public boolean instant(){
 		if (instant == null)
 			return false;
-		return instant.produce(0);
+		return instant.eval(0);
 	}
 	
 	@Override

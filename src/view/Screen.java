@@ -2,6 +2,7 @@ package view;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -24,7 +25,7 @@ public abstract class Screen extends JPanel{
 		font = new Font(Font.SANS_SERIF, Font.PLAIN, tileset.th);
 		setBackground(tileset.color(bg));
 		this.dim = new Dimension(dim.x, dim.y);
-		dim = tileset.toScreen.produce(dim);
+		dim = tileset.toScreen.eval(dim);
 		setPreferredSize(new Dimension(dim.x, dim.y));
 	}
 	
@@ -37,7 +38,7 @@ public abstract class Screen extends JPanel{
 	}
 	
 	protected void writeTF(Graphics g, String st, Point p, int color){
-		p = tileset.toScreen.produce(p.add(new Point(0, 1)));
+		p = tileset.toScreen.eval(p.add(new Point(0, 1)));
 		g.setColor(tileset.color(color));
 		g.drawString(st, p.x, p.y-g.getFontMetrics().getMaxDescent());
 	}
@@ -47,13 +48,15 @@ public abstract class Screen extends JPanel{
 	}
 	
 	protected void draw(Graphics g, ASCII tile, Point p){
-		p = tileset.toScreen.produce(p);
+		p = tileset.toScreen.eval(p);
 		g.drawImage(tileset.getTileImage(tile), p.x, p.y, null);
 	}
 	
 	protected void draw(Graphics g, Tile tile, Point p){
-		p = tileset.toScreen.produce(p);
-		g.drawImage(tileset.getTileImage(tile), p.x, p.y, null);
+		p = tileset.toScreen.eval(p);
+		BufferedImage tileImage = (tile.spritesheet == null)? 
+				tileset.getTileImage(tile): tile.getTileImage();
+		g.drawImage(tileImage, p.x, p.y, null);
 	}
 	
 	protected void writeChar(Graphics g, char ch, int x, int y, int cl){

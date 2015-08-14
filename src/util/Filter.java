@@ -2,7 +2,7 @@ package util;
 
 import java.awt.image.BufferedImage;
 
-public abstract class Filter implements Lambda<BufferedImage, BufferedImage>{
+public abstract class Filter implements Function<BufferedImage, BufferedImage>{
 	
 	@Override
 	public boolean equals(Object obj){

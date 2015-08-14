@@ -19,8 +19,8 @@ public class ShowMap {
 	private void initialize(){
 		Tileset tileset = new Tileset("tileset1.png", 12, 12);
 		tileset.ASCII = true;
-		Lambda<Point, Entity> defaultTerrain = new Lambda<Point, Entity>(){
-			public Entity produce(Point p){
+		Function<Point, Entity> defaultTerrain = new Function<Point, Entity>(){
+			public Entity eval(Point p){
 				Entity e = new Entity("floor");
 				e.add(p, new ASCII(' ', 7, 15));	
 				return e;
